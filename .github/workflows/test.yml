@@ -1,0 +1,46 @@
+name: Terraform TEST
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+
+  terraform:
+
+    runs-on:
+      - self-hosted
+      - test
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-2
+
+      - name: Terraform Init
+        run: |
+          cd terraform/test
+          terraform init
+
+      - name: Terraform Validate
+        run: |
+          cd terraform/test
+          terraform validate
+
+      - name: Terraform Plan
+        run: |
+          cd terraform/test
+          terraform plan
+
+      - name: Terraform Apply
+        run: |
+          cd terraform/test
+          terraform apply -auto-approve
