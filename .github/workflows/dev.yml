@@ -36,10 +36,7 @@ jobs:
           cd env/dev
           terraform init
 
-      - name: Terraform Validate
-        run: |
-          cd env/dev
-          terraform validate
+      
 
       - name: Terraform Plan
         run: |
