@@ -36,8 +36,6 @@ jobs:
           cd env/test
           terraform init
 
-
-
       - name: Terraform Plan
         run: |
           cd env/test
