@@ -1,9 +1,15 @@
 name: Terraform TEST
 
 on:
-  push:
-    branches:
-      - test
+  workflow_dispatch:
+    inputs:
+      terraform_action:
+        type: choice
+        description: Action to perform
+        default: Apply
+        options:
+          - Apply
+          - Destroy
 
 jobs:
 
@@ -41,6 +47,13 @@ jobs:
           terraform plan
 
       - name: Terraform Apply
+        if: ${{ github.event.inputs.terraform_action == 'Apply' }}
         run: |
-          cd env/test
-          terraform apply -auto-approve
+            cd env/dev
+            terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.terraform_action == 'Destroy' }}
+        run: |
+            cd env/dev
+            terraform destroy -auto-approve
