@@ -1,9 +1,15 @@
 name: Terraform DEV
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_dispatch:
+    inputs:
+      terraform_action:
+        type: choice
+        description: Action to perform
+        default: Apply
+        options:
+          - Apply
+          - Destroy
 
 jobs:
 
@@ -27,20 +33,27 @@ jobs:
 
       - name: Terraform Init
         run: |
-          cd env/dev
+          cd env/test
           terraform init
 
       - name: Terraform Validate
         run: |
-          cd env/dev
+          cd env/test
           terraform validate
 
       - name: Terraform Plan
         run: |
-          cd env/dev
+          cd env/test
           terraform plan
 
       - name: Terraform Apply
+        if: ${{ github.event.inputs.terraform_action == 'Apply' }}
         run: |
-          cd env/dev
-          terraform apply -auto-approve
+            cd env/dev
+            terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.terraform_action == 'Destroy' }}
+        run: |
+            cd env/dev
+            terraform destroy -auto-approve
