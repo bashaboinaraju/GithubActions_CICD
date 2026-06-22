@@ -49,11 +49,11 @@ jobs:
       - name: Terraform Apply
         if: ${{ github.event.inputs.terraform_action == 'Apply' }}
         run: |
-            cd env/dev
+            cd env/test
             terraform apply -auto-approve
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.terraform_action == 'Destroy' }}
         run: |
-            cd env/dev
+            cd env/test
             terraform destroy -auto-approve
